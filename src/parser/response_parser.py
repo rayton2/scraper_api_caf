@@ -10,7 +10,7 @@ It includes functions that take raw JSON data and extract relevant information f
 import json
 from typing import List, Dict
 
-def parse_municipios_response(response: str) -> List[Dict]:
+def parse_municipios_response(response: dict) -> List[Dict]:
     """
     Parses the JSON response for municipalities.
 
@@ -21,8 +21,7 @@ def parse_municipios_response(response: str) -> List[Dict]:
         List[Dict]: A list of dictionaries containing municipality data.
     """
     try:
-        data = json.loads(response)
-        municipios = data.get('municipios', [])
+        municipios = response.get('municipios', [])
         return municipios
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")

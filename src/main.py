@@ -2,23 +2,16 @@
 
 import os
 from client.api_client import APIClient
-from parser.response_parser import ResponseParser
-from storage.excel_writer import ExcelWriter
+from parser.response_parser import parse_municipios_response, parse_consulta_publica_response
+from storage.excel_writer import save_to_excel
 from config.settings import BASE_URL, HEADERS
 
 def main():
-    """
-    Main function to orchestrate the data extraction process.
-    It fetches municipalities and their associated data,
-    parses the JSON responses, and writes the results to an Excel file.
-    """
     api_client = APIClient(BASE_URL, HEADERS)
-    response_parser = ResponseParser()
-    excel_writer = ExcelWriter()
 
     # Step 1: Get all municipalities
     municipios_response = api_client.get_municipios(uf='GO')
-    municipios = response_parser.parse_municipios(municipios_response)
+    municipios = parse_municipios_response(municipios_response)
 
     # Step 2: Iterate through each municipality and fetch paginated results
     all_data = []
@@ -27,7 +20,7 @@ def main():
         page = 1
         while True:
             consulta_response = api_client.get_consulta_publica(uf='GO', codigoMunicipio=codigo, pagina=page)
-            parsed_data = response_parser.parse_consulta_publica(consulta_response)
+            parsed_data = parse_consulta_publica_response(consulta_response)
 
             if not parsed_data:
                 break  # Exit loop if no more data is available
@@ -36,8 +29,9 @@ def main():
             page += 1  # Increment page for next request
 
     # Step 3: Write results into an Excel file
+    os.makedirs('data', exist_ok=True)
     output_file_path = os.path.join('data', 'output.xlsx')
-    excel_writer.write_to_excel(all_data, output_file_path)
+    save_to_excel(all_data, output_file_path)
 
 if __name__ == "__main__":
     main()
