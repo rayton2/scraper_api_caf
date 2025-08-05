@@ -1,7 +1,7 @@
 # Configuration settings for the API data extractor project
 
 # Base URL for the CAF API
-BASE_URL = "https://caf.mda.gov.br/consulta-publica/ufpa"
+BASE_URL = "https://caf.mda.gov.br"
 
 # Default headers for HTTP requests
 HEADERS = {

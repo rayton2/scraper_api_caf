@@ -7,7 +7,7 @@ from storage.excel_writer import save_to_excel
 from config.settings import BASE_URL, HEADERS
 
 def main():
-    api_client = APIClient(BASE_URL, HEADERS)
+    api_client = APIClient()
 
     # Step 1: Get all municipalities
     municipios_response = api_client.get_municipios(uf='GO')
@@ -19,7 +19,7 @@ def main():
         codigo = municipio['codigo']
         page = 1
         while True:
-            consulta_response = api_client.get_consulta_publica(uf='GO', codigoMunicipio=codigo, pagina=page)
+            consulta_response = api_client.get_consulta_publica(uf='GO', codigo_municipio=codigo, pagina=page)
             parsed_data = parse_consulta_publica_response(consulta_response)
 
             if not parsed_data:

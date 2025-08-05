@@ -1,25 +1,8 @@
 # response_parser.py
-
-"""
-response_parser.py
-
-This module is responsible for parsing JSON responses from the API into usable Python dictionaries or lists.
-It includes functions that take raw JSON data and extract relevant information for further processing.
-"""
-
 import json
 from typing import List, Dict
 
 def parse_municipios_response(response: dict) -> List[Dict]:
-    """
-    Parses the JSON response for municipalities.
-
-    Args:
-        response (str): The raw JSON response as a string.
-
-    Returns:
-        List[Dict]: A list of dictionaries containing municipality data.
-    """
     try:
         municipios = response.get('municipios', [])
         return municipios
@@ -28,15 +11,6 @@ def parse_municipios_response(response: dict) -> List[Dict]:
         return []
 
 def parse_consulta_publica_response(response: str) -> List[Dict]:
-    """
-    Parses the JSON response for public consultation data.
-
-    Args:
-        response (str): The raw JSON response as a string.
-
-    Returns:
-        List[Dict]: A list of dictionaries containing public consultation data.
-    """
     try:
         data = json.loads(response)
         consultas = data.get('consultas', [])
