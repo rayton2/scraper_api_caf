@@ -12,15 +12,7 @@ class APIClient:
         self.headers = HEADERS
 
     def get_municipios(self, uf):
-        """
-        Fetches all municipalities for a given UF.
 
-        Args:
-            uf (str): The UF code to fetch municipalities for.
-
-        Returns:
-            dict: JSON response containing municipalities data.
-        """
         endpoint = f"{self.base_url}/api/municipios?uf={uf}"
         response = self._get_request(endpoint)
         return response

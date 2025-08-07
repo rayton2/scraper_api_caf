@@ -7,31 +7,46 @@ from storage.excel_writer import save_to_excel
 from config.settings import BASE_URL, HEADERS
 
 def main():
+    print("Iniciando extração via API...")
     api_client = APIClient()
 
     # Step 1: Get all municipalities
+    print("Buscando lista de municípios...")
     municipios_response = api_client.get_municipios(uf='GO')
+    print(f"Resposta recebida: {municipios_response}")
     municipios = parse_municipios_response(municipios_response)
+    print(f"Total de municípios encontrados: {len(municipios)}")
 
     # Step 2: Iterate through each municipality and fetch paginated results
     all_data = []
     for municipio in municipios:
         codigo = municipio['codigo']
+        print(f"Buscando dados para município {codigo}")
         page = 1
         while True:
+            print(f"Buscando município {municipio['nome']} (código: {codigo}), página {page}...")
+
             consulta_response = api_client.get_consulta_publica(uf='GO', codigo_municipio=codigo, pagina=page)
+            print("Resposta bruta da API:", consulta_response.text[:300])
+
             parsed_data = parse_consulta_publica_response(consulta_response)
+            print(f"Dados extraídos nesta página: {len(parsed_data)} registros")
 
             if not parsed_data:
+                print("Sem dados nesta página. Encerrando loop.")
                 break  # Exit loop if no more data is available
 
+            print(f"{len(parsed_data)} registros encontrados")
             all_data.extend(parsed_data)
             page += 1  # Increment page for next request
+
+    print(f"Total de registros coletados: {len(all_data)}")
 
     # Step 3: Write results into an Excel file
     os.makedirs('data', exist_ok=True)
     output_file_path = os.path.join('data', 'output.xlsx')
     save_to_excel(all_data, output_file_path)
+    print(f"Dados salvos em {output_file_path}")
 
 if __name__ == "__main__":
     main()
