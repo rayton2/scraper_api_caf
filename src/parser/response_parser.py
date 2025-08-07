@@ -4,8 +4,7 @@ from typing import List, Dict
 
 def parse_municipios_response(response: dict) -> List[Dict]:
     try:
-        municipios = response.get('municipios', [])
-        return municipios
+        return response.get("municipios",[])
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")
         return []

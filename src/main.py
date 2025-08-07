@@ -13,9 +13,12 @@ def main():
     # Step 1: Get all municipalities
     print("Buscando lista de municípios...")
     municipios_response = api_client.get_municipios(uf='GO')
-    print(f"Resposta recebida: {municipios_response}")
-    municipios = parse_municipios_response(municipios_response)
+    print("Tipo do response:", type(municipios_response))
+    #print("Exemplo de município:", municipios_response[0] if municipios_response else "Lista vazia")
+    #municipios = municipios_response.get('municipios', [])
+    municipios = parse_municipios_response(municipios_response.get("data", []))
     print(f"Total de municípios encontrados: {len(municipios)}")
+    print("Exemplo de município:", municipios[0] if municipios else "Lista vazia")
 
     # Step 2: Iterate through each municipality and fetch paginated results
     all_data = []
@@ -27,7 +30,6 @@ def main():
             print(f"Buscando município {municipio['nome']} (código: {codigo}), página {page}...")
 
             consulta_response = api_client.get_consulta_publica(uf='GO', codigo_municipio=codigo, pagina=page)
-            print("Resposta bruta da API:", consulta_response.text[:300])
 
             parsed_data = parse_consulta_publica_response(consulta_response)
             print(f"Dados extraídos nesta página: {len(parsed_data)} registros")

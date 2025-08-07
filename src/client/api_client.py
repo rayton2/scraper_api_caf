@@ -4,15 +4,11 @@ import requests
 from config.settings import BASE_URL, HEADERS
 
 class APIClient:
-    """Handles HTTP requests to the CAF API."""
-
     def __init__(self):
-        """Initializes the API client with base URL and headers."""
         self.base_url = BASE_URL
         self.headers = HEADERS
 
     def get_municipios(self, uf):
-
         endpoint = f"{self.base_url}/api/municipios?uf={uf}"
         response = self._get_request(endpoint)
         return response
@@ -23,8 +19,10 @@ class APIClient:
         return response
 
     def _get_request(self, url):
-
-        response = requests.get(url, headers=self.headers)
-        if response.status_code != 200:
-            raise Exception(f"Error fetching data: {response.status_code} - {response.text}")
-        return response.json()
+        try:
+            response = requests.get(url, headers=self.headers)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            print(f"[ERROR] Request failed: {e}")
+            return {}
