@@ -2,10 +2,21 @@
 import json
 from typing import List, Dict
 
-def parse_municipios_response(response: dict) -> List[Dict]:
+def parse_municipios_response(response) -> List[Dict]:
     try:
-        # Supondo que 'response' seja um dict que já contém os dados dos municípios
-        return response if isinstance(response, list) else response.get("municipios", [])
+        if isinstance(response, list):
+            return response
+        elif isinstance(response, dict):
+            # Tenta encontrar a chave correta
+            if "municipios" in response:
+                return response["municipios"]
+            elif "data" in response:
+                return response["data"]
+            else:
+                # Se não encontrar, tenta extrair lista de dicts
+                return [v for v in response.values() if isinstance(v, list)]
+        else:
+            return []
     except Exception as e:
         print(f"Erro ao processar resposta dos municípios: {e}")
         return []
