@@ -5,6 +5,7 @@ from client.api_client import APIClient
 from parser.response_parser import parse_municipios_response, parse_consulta_publica_response
 from storage.excel_writer import save_to_excel
 from config.settings import BASE_URL, HEADERS
+import time
 
 def main():
     print("Iniciando extração via API...")
@@ -42,6 +43,9 @@ def main():
             print(f"{len(parsed_data)} registros encontrados")
             all_data.extend(parsed_data)
             page += 1  # Increment page for next request
+
+            time.sleep(5)
+        time.sleep(60)
 
     print(f"Total de registros coletados: {len(all_data)}")
 

@@ -4,19 +4,14 @@ from typing import List, Dict
 
 def parse_municipios_response(response) -> List[Dict]:
     try:
-        if isinstance(response, list):
-            return response
-        elif isinstance(response, dict):
-            # Tenta encontrar a chave correta
-            if "municipios" in response:
-                return response["municipios"]
-            elif "data" in response:
-                return response["data"]
-            else:
-                # Se não encontrar, tenta extrair lista de dicts
-                return [v for v in response.values() if isinstance(v, list)]
-        else:
-            return []
+        if isinstance(response, dict):
+            # Extrai da chave 'dados'
+            municipios = response.get('dados', [])
+            if isinstance(municipios, list):
+                return [item for item in municipios if isinstance(item, dict)]
+        elif isinstance(response, list):
+            return [item for item in response if isinstance(item, dict)]
+        return []
     except Exception as e:
         print(f"Erro ao processar resposta dos municípios: {e}")
         return []
