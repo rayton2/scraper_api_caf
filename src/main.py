@@ -14,16 +14,17 @@ def main():
     print("Buscando lista de municípios...")
     municipios_response = api_client.get_municipios(uf='GO')
     print("Tipo do response:", type(municipios_response))
+    print("municipios_response:", municipios_response)
     #print("Exemplo de município:", municipios_response[0] if municipios_response else "Lista vazia")
     #municipios = municipios_response.get('municipios', [])
-    municipios = parse_municipios_response(municipios_response.get("data", []))
+    municipios = parse_municipios_response(municipios_response)
     print(f"Total de municípios encontrados: {len(municipios)}")
     print("Exemplo de município:", municipios[0] if municipios else "Lista vazia")
 
     # Step 2: Iterate through each municipality and fetch paginated results
     all_data = []
     for municipio in municipios:
-        codigo = municipio['codigo']
+        codigo = municipio['codigoMunicipio']
         print(f"Buscando dados para município {codigo}")
         page = 1
         while True:
