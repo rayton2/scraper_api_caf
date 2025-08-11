@@ -4,7 +4,7 @@ import os
 from client.api_client import APIClient
 from parser.response_parser import parse_municipios_response, parse_consulta_publica_response
 from storage.excel_writer import save_to_excel
-from config.settings import BASE_URL, HEADERS
+from config.settings import DEFAULT_PAGE_SIZE
 import time
 
 def main():
@@ -31,7 +31,13 @@ def main():
         while True:
             print(f"Buscando município {municipio['nome']} (código: {codigo}), página {page}...")
 
-            consulta_response = api_client.get_consulta_publica(uf='GO', codigo_municipio=codigo, pagina=page)
+            consulta_response = api_client.get_consulta_publica(
+                uf='GO', 
+                codigo_municipio=codigo, 
+                pagina=page,
+                tamanho_pagina=DEFAULT_PAGE_SIZE
+            )
+            print("Resposta da API:", consulta_response) 
 
             parsed_data = parse_consulta_publica_response(consulta_response)
             print(f"Dados extraídos nesta página: {len(parsed_data)} registros")
@@ -40,12 +46,14 @@ def main():
                 print("Sem dados nesta página. Encerrando loop.")
                 break  # Exit loop if no more data is available
 
-            print(f"{len(parsed_data)} registros encontrados")
             all_data.extend(parsed_data)
+            if len(parsed_data) < DEFAULT_PAGE_SIZE:
+                print("Última página alcançada. Encerrando loop.")
+                break
+            
             page += 1  # Increment page for next request
-
             time.sleep(5)
-        time.sleep(60)
+        time.sleep(10)
 
     print(f"Total de registros coletados: {len(all_data)}")
 

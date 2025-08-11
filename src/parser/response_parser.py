@@ -18,7 +18,7 @@ def parse_municipios_response(response) -> List[Dict]:
 
 def parse_consulta_publica_response(response: dict) -> List[Dict]:
     try:
-        consultas = response.get('consultas', [])
+        consultas = response.get('dados', [])
         return consultas
     except json.JSONDecodeError as e:
         print(f"Error decoding JSON: {e}")

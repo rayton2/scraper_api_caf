@@ -2,6 +2,7 @@
 
 import requests
 from config.settings import BASE_URL, HEADERS
+import time
 
 class APIClient:
     def __init__(self):
@@ -15,6 +16,7 @@ class APIClient:
 
     def get_consulta_publica(self, uf, codigo_municipio, pagina=1, tamanho_pagina=9999):
         endpoint = f"{self.base_url}/api/ufpa/consulta-publica?uf={uf}&codigoMunicipio={codigo_municipio}&pagina={pagina}&tamanhoPagina={tamanho_pagina}"
+        # time.sleep(10)
         response = self._get_request(endpoint)
         return response
 
