@@ -10,7 +10,7 @@ HEADERS = {
 }
 
 # Constants for UF codes
-UF_CODE_GO = "GO"
+UF_CODE_GO = "TO"
 
 # Pagination settings
 DEFAULT_PAGE_SIZE = 9999

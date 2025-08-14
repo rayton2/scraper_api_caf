@@ -16,7 +16,6 @@ class APIClient:
 
     def get_consulta_publica(self, uf, pagina=1, tamanho_pagina=9999):
         endpoint = f"{self.base_url}/api/ufpa/consulta-publica?uf={uf}&pagina={pagina}&tamanhoPagina={tamanho_pagina}"
-        # &codigoMunicipio={codigo_municipio}
         # time.sleep(10)
         response = self._get_request(endpoint)
         return response
